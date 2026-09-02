@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTunebook</title>
+</head>
+<body>
+    <div id="root">
+        <div style="font-family: system-ui, sans-serif; padding: 24px; color: #222;">
+            Loading MTunebook...
+        </div>
+    </div>
+    <script>
+        window.setTimeout(function () {
+            var isPages = window.location.hostname.endsWith("github.io");
+            var isFallbackRoot = !window.location.pathname.includes("/dist/");
+            var root = document.getElementById("root");
+            var stillLoading = root && root.textContent.includes("Loading MTunebook");
+
+            if (isPages && isFallbackRoot && stillLoading) {
+                window.location.replace("./dist/");
+            }
+        }, 4000);
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
