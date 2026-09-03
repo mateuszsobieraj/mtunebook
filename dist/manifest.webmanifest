@@ -1,0 +1,13 @@
+{
+  "name": "MTunebook",
+  "short_name": "MTunebook",
+  "description": "A handy tunebook with notation and melody playback",
+  "lang": "en",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#183d30",
+  "theme_color": "#183d30",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

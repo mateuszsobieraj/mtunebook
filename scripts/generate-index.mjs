@@ -1,97 +1,52 @@
 #!/usr/bin/env node
 
-/**
- * generate-index.mjs
- *
- * Generates a song index JSON file from .chordpro files in a directory.
- * It reads ChordPro directives {title: ...} and {artist: ...} from each file.
- * If directives are missing, it falls back to the filename.
- *
- * Usage:
- *   node scripts/generate-index.mjs [songsDir] [outputFile]
- *
- * Examples:
- *   node scripts/generate-index.mjs
- *   node scripts/generate-index.mjs ./public/songs ./public/songs/index.json
- */
-
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const tunesDir = path.resolve(projectRoot, process.argv[2] || 'public/tunes');
+const outputFile = path.resolve(projectRoot, process.argv[3] || 'public/tunes/index.json');
 
-function extractDirective(content, name) {
-  const match = content.match(new RegExp(`^\\s*\\{${name}\\s*:\\s*(.*?)\\s*\\}\\s*$`, 'im'));
-  return match ? match[1].trim() : '';
+function field(source, name) {
+  return source.match(new RegExp(`^${name}:\\s*(.+)$`, 'mi'))?.[1].trim() || '';
 }
 
-function generateSongIndex(songsDir, outputFile) {
-  if (!fs.existsSync(songsDir)) {
-    console.error(`Error: Songs directory not found: ${songsDir}`);
-    process.exit(1);
-  }
+function displayKey(key) {
+  return key
+    .replace(/mix(?:olydian)?$/i, ' mixolydian')
+    .replace(/dor(?:ian)?$/i, ' dorian')
+    .replace(/min(?:or)?$|m$/i, ' minor');
+}
 
-  const files = fs
-    .readdirSync(songsDir)
-    .filter((file) => /\.(chordpro|cho|crd)$/i.test(file))
-    .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+if (!fs.existsSync(tunesDir)) {
+  console.error(`Tunes directory not found: ${tunesDir}`);
+  process.exit(1);
+}
 
-  console.log(`Found ${files.length} song files (.chordpro/.cho/.crd) in ${songsDir}`);
+let previous = [];
+if (fs.existsSync(outputFile)) {
+  try { previous = JSON.parse(fs.readFileSync(outputFile, 'utf8')); } catch { /* regenerate invalid JSON */ }
+}
+const previousByFile = new Map(previous.map((tune) => [tune.filename, tune]));
 
-  const songs = files.map((file) => {
-    const filePath = path.join(songsDir, file);
-    const stats = fs.statSync(filePath);
-    const content = fs.readFileSync(filePath, 'utf8');
-
-    // Extract title from {title: ...} directive
-    const title = extractDirective(content, 'title') || path.parse(file).name.replace(/\.(chordpro|cho|crd)$/i, '').replace(/[_-]/g, ' ');
-
-    // Extract artist from {artist: ...} directive
-    const artist = extractDirective(content, 'artist');
-
-    // Extract genres from {genres: ...} directive
-    const genresValue = extractDirective(content, 'genres');
-    const genres = genresValue ? genresValue.split(',').map(g => g.trim()) : [];
-
-    // Extract tags from {tags: ...} directive
-    const tagsValue = extractDirective(content, 'tags');
-    const tags = tagsValue ? tagsValue.split(',').map(t => t.trim()) : [];
-
-    // Extract speed from {speed: ...} directive
-    const speed = extractDirective(content, 'speed').toLowerCase();
-
+const tunes = fs.readdirSync(tunesDir)
+  .filter((filename) => filename.toLowerCase().endsWith('.abc'))
+  .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
+  .map((filename) => {
+    const source = fs.readFileSync(path.join(tunesDir, filename), 'utf8');
+    const old = previousByFile.get(filename) || {};
+    const rawTempo = field(source, 'Q');
     return {
-      filename: file,
-      title: title,
-      artist: artist,
-      genres: genres,
-      tags: tags,
-      speed: speed,
-      lastModified: stats.mtime.toISOString()
+      filename,
+      title: field(source, 'T') || path.parse(filename).name.replaceAll('-', ' '),
+      rhythm: field(source, 'R').toLowerCase(),
+      meter: field(source, 'M'),
+      key: displayKey(field(source, 'K')),
+      tempo: Number(rawTempo.match(/(\d+)\s*$/)?.[1]) || 100,
+      tags: old.tags || []
     };
   });
 
-  // Ensure output directory exists
-  const outputDir = path.dirname(outputFile);
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
-  }
-
-  fs.writeFileSync(outputFile, JSON.stringify(songs, null, 2), 'utf8');
-  console.log(`Successfully generated index for ${songs.length} songs at ${outputFile}`);
-}
-
-// --- Main Execution ---
-const args = process.argv.slice(2);
-const projectRoot = path.resolve(__dirname, '..');
-
-// Default paths based on project structure (React/Vite keeps assets in public/)
-const defaultSongsDir = path.join(projectRoot, 'public', 'songs');
-const defaultOutputFile = path.join(projectRoot, 'public', 'songs', 'index.json');
-
-const songsDir = args[0] ? path.resolve(projectRoot, args[0]) : defaultSongsDir;
-const outputFile = args[1] ? path.resolve(projectRoot, args[1]) : defaultOutputFile;
-
-generateSongIndex(songsDir, outputFile);
+fs.writeFileSync(outputFile, `${JSON.stringify(tunes, null, 2)}\n`, 'utf8');
+console.log(`Generated an index for ${tunes.length} tunes: ${outputFile}`);

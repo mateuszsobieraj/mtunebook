@@ -1,11 +1,11 @@
 X:4
 T:Sailor's Hornpipe
+R:hornpipe
 M:4/4
 L:1/8
-Q:1/4=112
-R:hornpipe
+Q:120
 K:D
-|: "D"d2 dc "A7"B2 A2 | "D"d2 f2 "G"g2 f2 | "D"e2 dc "A7"B2 A2 | "D"d4 z4 |
-"D"d2 dc "A7"B2 A2 | "D"d2 f2 "G"g2 f2 | "D"e2 dc "A7"B2 A2 | "D"d4 z4 :|
-|: "D"f2 ed "A7"c2 B2 | "D"A2 d2 "G"B2 A2 | "D"f2 ed "A7"c2 B2 | "D"A4 z4 |
-"D"f2 ed "A7"c2 B2 | "D"A2 d2 "G"B2 A2 | "D"f2 ed "A7"c2 B2 | "D"A4 z4 :|
+dc|:"D"d2D2 D2 AG|"D"FAdcdfed|"E"e2E2 E2 ED|"A"^CEA2 A2 Bc|
+"D"dcBA BAGF|"G"GFED EDCB,|"A"A,DCE DFEG|[1 "D"F2D2 D2 dc:|[2"D"F2D2 D2 AG|
+|:"D"FAdA FAdA|"G"B2G2 G2 BA|"E7"^GBeB GBeB|"A"c2A2 A2 Bc|
+"D"dcBA BAGF|"G"GFED EDCB,|"A"A,DCE DFEG|[1 "D"F2D2 D2 AG:|[2"D"F2D2 D2 z2|

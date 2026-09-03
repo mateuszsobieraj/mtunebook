@@ -8,9 +8,9 @@ export default function TuneList({ tunes = [], query, onSelect, isLoading, error
       letter, tunes: items.sort((a, b) => a.title.localeCompare(b.title))
     }));
   }, [tunes]);
-  if (isLoading) return <div className="empty-state">Loading tunes...</div>;
+  if (isLoading) return <div className="empty-state">Loading tunes…</div>;
   if (error) return <div className="empty-state">{error}</div>;
-  if (!groups.length) return <div className="empty-state">{query ? `No tunes match "${query}".` : 'The tunebook is empty.'}</div>;
+  if (!groups.length) return <div className="empty-state">{query ? `No tunes match “${query}”.` : 'The tunebook is empty.'}</div>;
   return <div className="tune-list">{groups.map(({ letter, tunes: items }) =>
     <section key={letter} className="letter-section"><h2>{letter} <small>{items.length}</small></h2>
       <div className="tune-grid">{items.map((tune) =>

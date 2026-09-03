@@ -1,6 +1,55 @@
 [
-  { "filename": "red-haired-boy.abc", "title": "Red Haired Boy", "rhythm": "reel", "meter": "4/4", "key": "G mixolydyjska", "tags": ["irish"] },
-  { "filename": "kesh-jig.abc", "title": "Kesh Jig", "rhythm": "jig", "meter": "6/8", "key": "G", "tags": ["irish"] },
-  { "filename": "devils-dream.abc", "title": "Devil's Dream", "rhythm": "reel", "meter": "4/4", "key": "D", "tags": ["traditional"] },
-  { "filename": "sailors-hornpipe.abc", "title": "Sailor's Hornpipe", "rhythm": "hornpipe", "meter": "4/4", "key": "D", "tags": ["traditional"] }
+  {
+    "filename": "devils-dream.abc",
+    "title": "Devil's Dream",
+    "rhythm": "reel",
+    "meter": "4/4",
+    "key": "G",
+    "tempo": 120,
+    "tags": [
+      "traditional"
+    ]
+  },
+  {
+    "filename": "julia-delaneys-reel.abc",
+    "title": "Julia Delaney's Reel",
+    "rhythm": "reel",
+    "meter": "4/4",
+    "key": "D minor",
+    "tempo": 180,
+    "tags": []
+  },
+  {
+    "filename": "kesh-jig.abc",
+    "title": "Kesh Jig",
+    "rhythm": "jig",
+    "meter": "6/8",
+    "key": "G",
+    "tempo": 160,
+    "tags": [
+      "irish"
+    ]
+  },
+  {
+    "filename": "red-haired-boy.abc",
+    "title": "Red Haired Boy",
+    "rhythm": "reel",
+    "meter": "4/4",
+    "key": "G mixolydian",
+    "tempo": 100,
+    "tags": [
+      "irish"
+    ]
+  },
+  {
+    "filename": "sailors-hornpipe.abc",
+    "title": "Sailor's Hornpipe",
+    "rhythm": "hornpipe",
+    "meter": "4/4",
+    "key": "D",
+    "tempo": 120,
+    "tags": [
+      "traditional"
+    ]
+  }
 ]

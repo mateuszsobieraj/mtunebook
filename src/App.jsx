@@ -15,7 +15,11 @@ export default function App() {
   useEffect(() => {
     fetch(`${base}tunes/index.json`)
       .then((response) => response.ok ? response.json() : Promise.reject(new Error()))
-      .then(setTunes)
+      .then((items) => {
+        setTunes(items);
+        const lastFilename = localStorage.getItem('mtunebook:last-tune');
+        if (lastFilename) setCurrent(items.find((tune) => tune.filename === lastFilename) || null);
+      })
       .catch(() => setError('Unable to load the tune list.'))
       .finally(() => setLoading(false));
   }, [base]);
@@ -35,18 +39,19 @@ export default function App() {
   const filtered = tunes.filter((tune) =>
     [tune.title, tune.rhythm, tune.key, ...(tune.tags || [])].join(' ').toLowerCase().includes(query.toLowerCase())
   );
-  const goHome = () => { setCurrent(null); setQuery(''); };
+  const selectTune = (tune) => { localStorage.setItem('mtunebook:last-tune', tune.filename); setCurrent(tune); };
+  const goHome = () => { localStorage.removeItem('mtunebook:last-tune'); setCurrent(null); setQuery(''); };
 
   return <div className="app">
     <header className="site-header">
       <button className="brand" onClick={goHome} aria-label="Go to tune list">
         <span className="brand-mark">𝄞</span><span>MTunebook</span>
       </button>
-      {!current && <input className="search" type="search" placeholder="Search by title, rhythm, or key..." value={query} onChange={(e) => setQuery(e.target.value)} />}
+      {!current && <input className="search" type="search" placeholder="Search by title, rhythm, or key…" value={query} onChange={(e) => setQuery(e.target.value)} />}
     </header>
     <main>{current
       ? <TuneDetail tune={current} content={content} isLoading={tuneLoading} error={error} />
-      : <TuneList tunes={filtered} query={query} onSelect={setCurrent} isLoading={loading} error={error} />}
+      : <TuneList tunes={filtered} query={query} onSelect={selectTune} isLoading={loading} error={error} />}
     </main>
   </div>;
 }

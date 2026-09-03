@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "npm run generate:index && vite",
+    "build": "npm run generate:index && vite build",
     "preview": "vite preview",
     "generate:index": "node scripts/generate-index.mjs",
     "test": "vitest run",
