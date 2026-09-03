@@ -15,16 +15,24 @@
         </div>
     </div>
     <script>
-        window.setTimeout(function () {
-            var isPages = window.location.hostname.endsWith("github.io");
-            var isFallbackRoot = !window.location.pathname.includes("/dist/");
+        window.setTimeout(async function () {
             var root = document.getElementById("root");
             var stillLoading = root && root.textContent.includes("Loading MTunebook");
+            var stylesMissing = getComputedStyle(document.body).backgroundImage === "none";
 
-            if (isPages && isFallbackRoot && stillLoading) {
-                window.location.replace("./dist/");
+            if ((stillLoading || stylesMissing) && !sessionStorage.getItem("mtunebook-cache-recovered")) {
+                sessionStorage.setItem("mtunebook-cache-recovered", "true");
+                if ("serviceWorker" in navigator) {
+                    var registrations = await navigator.serviceWorker.getRegistrations();
+                    await Promise.all(registrations.map(function (registration) { return registration.unregister(); }));
+                }
+                if ("caches" in window) {
+                    var keys = await caches.keys();
+                    await Promise.all(keys.map(function (key) { return caches.delete(key); }));
+                }
+                window.location.reload();
             }
-        }, 4000);
+        }, 3000);
     </script>
     <script type="module" src="/src/main.jsx"></script>
 </body>
