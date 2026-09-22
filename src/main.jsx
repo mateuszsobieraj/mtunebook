@@ -23,6 +23,7 @@ class ErrorBoundary extends React.Component {
         <div className="empty-state">
           <h2>MTunebook could not start</h2>
           <p>Refresh the page. If the problem persists, check the browser console.</p>
+          <button onClick={() => window.location.reload()}>Try again</button>
         </div>
       );
     }
@@ -40,5 +41,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 );
 
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch((error) => {
+      console.warn('Offline support could not be installed', error);
+    });
+  });
 }

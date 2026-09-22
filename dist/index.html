@@ -7,9 +7,8 @@
     <meta name="theme-color" content="#183d30">
     <meta name="description" content="A handy tunebook with notation and melody playback">
     <link rel="manifest" href="./manifest.webmanifest">
-  <script type="module" crossorigin src="./assets/index-B4PHb8kC.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/abcjs-Yk-_Bz28.js">
-  <link rel="stylesheet" crossorigin href="./assets/index-C51VoKUW.css">
+  <script type="module" crossorigin src="./assets/index-DOK73kB7.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CGqlfwHC.css">
 </head>
 <body>
     <div id="root">
@@ -18,24 +17,18 @@
         </div>
     </div>
     <script>
-        window.setTimeout(async function () {
+        window.setTimeout(function () {
             var root = document.getElementById("root");
             var stillLoading = root && root.textContent.includes("Loading MTunebook");
-            var stylesMissing = getComputedStyle(document.body).backgroundImage === "none";
-
-            if ((stillLoading || stylesMissing) && !sessionStorage.getItem("mtunebook-cache-recovered")) {
-                sessionStorage.setItem("mtunebook-cache-recovered", "true");
-                if ("serviceWorker" in navigator) {
-                    var registrations = await navigator.serviceWorker.getRegistrations();
-                    await Promise.all(registrations.map(function (registration) { return registration.unregister(); }));
-                }
-                if ("caches" in window) {
-                    var keys = await caches.keys();
-                    await Promise.all(keys.map(function (key) { return caches.delete(key); }));
-                }
-                window.location.reload();
+            if (stillLoading) {
+                var message = document.createElement("p");
+                message.textContent = "Loading is taking longer than expected. Check your connection or try again.";
+                var retry = document.createElement("button");
+                retry.textContent = "Try again";
+                retry.onclick = function () { window.location.reload(); };
+                root.append(message, retry);
             }
-        }, 3000);
+        }, 10000);
     </script>
 </body>
 </html>

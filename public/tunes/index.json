@@ -31,6 +31,15 @@
     ]
   },
   {
+    "filename": "old-hag-at-the-churn.abc",
+    "title": "Old Hag at the Churn",
+    "rhythm": "jig",
+    "meter": "6/8",
+    "key": "D mixolydian",
+    "tempo": 120,
+    "tags": []
+  },
+  {
     "filename": "red-haired-boy.abc",
     "title": "Red Haired Boy",
     "rhythm": "reel",
