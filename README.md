@@ -4,7 +4,7 @@ A React tunebook for ABC notation, transposition, and melody playback.
 
 ## Development
 
-Use Node.js 20 or newer:
+Use Node.js 24 or newer:
 
 ```sh
 npm ci
